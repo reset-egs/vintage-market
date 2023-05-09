@@ -9,7 +9,11 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.FrameLayout
 import com.example.vintagemarket.databinding.ActivityMainBinding
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,10 +32,12 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
+        val fab = findViewById<FloatingActionButton>(R.id.fab)
+
+        fab.setOnClickListener(View.OnClickListener {
+            navController.navigate(R.id.action_itemListFragment_to_addItemFragment)
+        })
+        fab.hide()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -45,7 +51,10 @@ class MainActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_logout -> {
+                findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.action_global_logoutDialogFragment)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -54,5 +63,15 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+    fun showFAB() {
+        val fab = findViewById<FloatingActionButton>(R.id.fab)
+        fab.show()
+    }
+
+    fun hideFAB() {
+        val fab = findViewById<FloatingActionButton>(R.id.fab)
+        fab.hide()
     }
 }
